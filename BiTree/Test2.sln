@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29324.140
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test2", "Test2.vcxproj", "{449A7C72-A274-4579-A98F-DF09E28C6D3E}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "BinaryTree", "..\BinaryTree\BinaryTree.vdproj", "{96A3D490-C7B8-4B70-A51E-E7117DE523D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Debug|x64.ActiveCfg = Debug|x64
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Debug|x64.Build.0 = Debug|x64
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Debug|x86.ActiveCfg = Debug|Win32
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Debug|x86.Build.0 = Debug|Win32
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Release|x64.ActiveCfg = Release|x64
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Release|x64.Build.0 = Release|x64
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Release|x86.ActiveCfg = Release|Win32
+		{449A7C72-A274-4579-A98F-DF09E28C6D3E}.Release|x86.Build.0 = Release|Win32
+		{96A3D490-C7B8-4B70-A51E-E7117DE523D3}.Debug|x64.ActiveCfg = Debug
+		{96A3D490-C7B8-4B70-A51E-E7117DE523D3}.Debug|x86.ActiveCfg = Debug
+		{96A3D490-C7B8-4B70-A51E-E7117DE523D3}.Release|x64.ActiveCfg = Release
+		{96A3D490-C7B8-4B70-A51E-E7117DE523D3}.Release|x86.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53F1CED8-B665-4469-A16F-3625E135B4A5}
+	EndGlobalSection
+EndGlobal

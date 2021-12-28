@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>堆排序</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="这是NO。12组的算法演示">
+  <meta name="author" content="工程松鼠 FRANK 源氏 全世界最可笑的中间派">
+  <meta name="generator" content="NewYear v0.1">
+
+  <link rel="canonical" href="http://getbootstrap.com/docs/4.5/examples/pricing/">
+  <link href="../index/bootstrap.css" rel="stylesheet">
+
+
+</head>
+<body>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <h5 class="my-0 mr-md-auto font-weight-normal display-4">NO.12</h5>
+  <nav class="my-2 my-md-0 mr-md-3 ">
+    <a class="p-2 text-dark " href="../index/index.html" >返回主页</a>
+    <a class="p-2 text-dark " href="../dist/analyse.html" target="_blank">演示一</a>
+    <a class="p-2 text-dark" href="../Heapsort/high.html" target="_blank">演示二</a>
+    <a class="p-2 text-dark" href="../BiTree/BiTree.html" target="_blank">演示三</a>
+  </nav>
+  <a class="btn btn-outline-primary" href="#" onclick="alert('请发送建议至:\nw982125792@163.com\n感谢您的反馈')">反馈建议</a>
+</div>
+  <script src="https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/d3/3.5.7/d3.min.js"></script>
+  <script>
+function totop(a, b, c, d){
+    var low=d;
+    while(low > 0){
+        var high;
+        high = (low - 1) >> 1;
+        if(b(a[low],a[high])){
+            var temp=a[low];
+            a[low]=a[high];
+            a[high]=temp;
+            c(high,low);
+            low=high;
+        }else break;
+    }
+}
+function tofoot(a, b, c, d) { 
+    var high=0,over=d,low=1;
+    while(low < over){
+        var right=1+low;
+        if((right < over)&&(b(a[right],a[low]))){
+            low=right;}
+        if(b(a[high],a[low]))break;
+        var temp=a[low];
+        a[low]=a[high];
+        a[high]=temp;
+        c(high,low);
+        high=low;
+        low=2*high+1;
+    }
+}
+function tree(a, b, c) {
+    var f = [],
+        n = Math.pow(2, a - 1) * c.x;
+    for (var j = 0; j < a; j++) {
+        var d = Math.pow(2, j),
+            e = n / d,
+            y = b.y + c.y * j,
+            x = b.x + (e - n) / 2;
+            for (var k = 0; k < d; k++) {
+                var i = d + k - 1;
+                f[i] = { x : x + k * e, y : y };
+                f[i].id = i;
+                f[i].high = i ? Math.floor((i - 1) / 2) : i;
+                f[i].group1 = true;
+            }
+    }
+    return f;
+};
+function createHeapVis(element) {
+    var col = d3.scale.linear().domain([0, 100]).range(["pink", "darkorchid"]);
+    var group, cnt ,now, min, items, a, b, points = [];
+    var paused = false, levels = 5, speed = 700;
+    var s = ['开始', '加入新元素', '交换', '入树', '结束', '出树']; var t ; var r = 32;
+    function che(a, b) {
+        b = b || '';
+        t = a;
+        hhh.text(s[t] + b);
+    }
+    function reset() {
+        var bigsize = 60;
+        radius = function (p) { 
+            skt = p.value ? (Math.sqrt(p.value) + 12) : 20;
+            return skt;}
+        var e = document.documentElement.clientWidth < 1;
+        if (e) {
+            r = 12;
+            radius = function (p) {
+                sks = p.value ? (Math.sqrt(p.value) / 2 + 7) : 12;
+                return sks;}
+            bigsize = 25;
+        }
+        var w=$("#zhu").width(), h=bigsize*(levels + 1)+20;
+        var add = element.select(".group2").append("svg");
+        hhh = add.append("text")
+            .attr("fill", "pink")
+            .attr("x",100)
+            .attr("y",100)
+            .style("font-size",30)
+        add.append("rect")
+            .attr("x",(w-60)/2)
+            .attr("y", h-60)
+            .attr("fill","rgb(244, 245, 230)")
+            .attr("stroke"," rgb(217, 228, 157)")
+            .attr("width",60)
+            .attr("height",60);
+        add.attr("width",w)
+            .attr("height",h);
+        che(0,0);
+        now = -3;
+        min = [];
+        a = (1 << levels) - 1;
+        cnt = a;
+        b = 0;
+        group = tree(levels,{ x: w / 2, y: bigsize / 2 },{ x: 1.5 * bigsize, y: bigsize });
+        items = [];
+        for (var i = 0; i < cnt; ++i) {
+            var p={x : w/2-60*(i-now),y : h-bigsize/2};
+            p.value = Math.ceil((99 * Math.random()));
+            p.group1 = false;
+            p.colour = col(p.value); 
+            items.push(p);
+        }
+        for (var i = 0; i < cnt; ++i) {
+            var p = { x: w / 2 - 60 * (cnt + i - now), y: h - bigsize / 2 };
+            p.value = false;
+            p.group1 = false;
+            p.colour = 'dimgray';
+            items.push(p);
+        }
+        cnt*=2;
+        lines = add.selectAll("line")
+            .data(group)
+            .enter()
+            .append("line");
+        lines.attr("x1", function (d) { return d.x; })
+            .attr("x2", function (d) { return group[d.high].x; })
+            .attr("y1", function (d) { return d.y; })
+            .attr("y2", function (d) { return group[d.high].y; })
+            .attr("stroke", "pink")
+            .attr("stroke-width", 2)
+            .style("opacity", 0)
+        points = add.selectAll("points")
+            .data(items)
+            .enter()
+            .append("g")
+            .style("stroke", function (d) { return d.colour; })
+            .style("fill", function (d) { return d.colour; })
+        background = points.append("circle")
+            .attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; })
+            .attr("r", radius)
+            .attr("fill", "white");
+        circle = points.append("circle")
+            .attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; })
+            .attr("r", radius)
+            .attr("fill-opacity", .2)
+            .attr("stroke-width", 1);
+        text = points.append("text")
+            .attr("text-anchor", "middle")
+            .attr("x", function (d) { return d.x; })
+            .attr("y", function (d) { return d.y+4; })
+            .style("font-size", e ? 8:12)
+            .style("font-weight", 200)
+            .text(function (d) { return d.value ? d.value : ''; });
+        begin();
+    };
+    function begin() {
+        function swap(a, b) {
+            min.push([group[a], group[b]]);
+        }
+        function compare(a, b) {
+            return b.value > a.value;
+        }
+        var rw = speed;
+        if (paused) {
+            rw=50;
+        } else if (min.length) {
+            rw/=2;
+            var ra = min[0];
+            min = min.splice(1, min.length);
+            if (ra === 'one') {
+                b--;
+                group[0] = group[b];
+                tofoot(group, compare, swap, b);
+                items[now].hide = true;
+            } else if (ra === 'over') {
+                items[now].hide = true;
+            } else {
+                if (ra[1].value) {
+                    if (ra[0].value)
+                    che(2, ' ' + ra[0].value + ' 和 ' + ra[1].value);
+                    else che(5, ' ' + ra[1].value);
+                }else if (now < cnt / 2)
+                    che(3, ' ' + ra[0].value);
+                else che(2, ' ' + ra[0].value);
+                var temp = ra[0].x;
+                ra[0].x = ra[1].x;
+                ra[1].x = temp;
+                temp = ra[0].y;
+                ra[0].y = ra[1].y;
+                ra[1].y = temp;
+                temp = ra[0].group1;
+                ra[0].group1 = ra[1].group1;
+                ra[1].group1 = temp;
+            }
+        } else {
+            for (var i = 0; i < items.length; ++i) {
+                if (!items[i].group1) {
+                    items[i].x += 60;
+                }
+            }
+            now += 1;
+            if ((now >= 0) && (now < cnt)) {
+                if (items[now].value) {
+                    che(1, ' ' + items[now].value);
+                    min.push([items[now], group[b]]);
+                    group[b] = items[now];
+                    totop(group, compare, swap, b);
+                    b++;
+                } else if (b > 0) {
+                    che(5, ' ' + group[0].value);
+                    if (b == 1) {
+                        min.push([items[now], group[0]]);
+                        min.push('over');
+                    } else {
+                        min.push([items[now], group[0]]);
+                        min.push([group[b - 1], items[now]]);
+                        min.push('one');
+                    }
+                }
+            }
+        }
+        var transition = d3.transition()
+            .duration(rw);
+        points.transition()
+            .duration(rw)
+            .style("opacity", function (d) { return d.hide ? 0 : 1; })
+            .ease("ease");
+        circle.transition()
+            .duration(rw)
+            .attr("cx", function (d, i) { return d.x; })
+            .attr("cy", function (d, i) { return d.y; })
+            .ease("ease");
+        background.transition()
+            .duration(rw)
+            .attr("cx", function (d, i) { return d.x; })
+            .attr("cy", function (d, i) { return d.y; })
+            .ease("ease");
+        text.transition()
+            .duration(rw)
+            .attr("x", function (d, i) { return d.x; })
+            .attr("y", function (d) { return d.y + 4; })
+            .ease("ease");
+        lines.transition()
+            .duration(rw)
+            .style("opacity", function (d) { return (d.id < b) ? 1 : 0; })
+            .ease("ease");
+        hhh.transition()
+            .duration(rw)
+            .ease("ease")
+            .attr("fill", "pink");        
+        if (now >= cnt) {
+            paused = true;
+            che(4);
+        }
+        if (now < cnt) {
+            transition.each("end", begin);
+        }
+
+    };
+    reset();
+}
+  </script>
+  <div>
+    <br>
+    <h1 id="zhu" style="color: darkorchid; height: 100px;top: 100px;">堆排序的算法演示动画</h1><br>
+    <div class="group">
+    <div class="group2"></div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function () { createHeapVis(d3.select(".group")) });
+  </script>
+</body>
+</html>
